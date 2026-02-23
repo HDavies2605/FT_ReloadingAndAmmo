@@ -39,12 +39,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* FireAction;
 
+	/*Reload Input Action*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ReloadAction;
+
 	/** How much ammo have we got */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
 	int AmmoInClip = 10;
+
 	/** Store our ammo type */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
 	UAmmoType* AmmoType;
+
+	/*How much ammo can be in the clip at once*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
+	int MaxAmmoInClip = 10;
+
+	/*How much ammo do we have in reserve */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ammo", meta = (AllowPrivateAccess = "true"))
+	int AmmoInReserve = 10;
 
 	/** Sets default values for this component's properties */
 	UTP_WeaponComponent();
@@ -56,6 +69,10 @@ public:
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
+
+	/*Try and reload the weapon*/
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void Reload();
 
 	/** Get the ammo count*/ 
 	UFUNCTION(BlueprintCallable, Category = "Ammo")

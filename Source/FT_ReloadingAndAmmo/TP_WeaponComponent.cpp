@@ -25,9 +25,10 @@ void UTP_WeaponComponent::Fire()
 {
 	if (AmmoInClip <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Out of ammo!"));
+		Reload();
 		return;
-	}else
+	}
+	else
 	{
 		AmmoInClip--;
 		UE_LOG(LogTemp, Warning, TEXT("%d bullets remaining"),AmmoInClip);
@@ -80,6 +81,25 @@ void UTP_WeaponComponent::Fire()
 	}
 }
 
+void UTP_WeaponComponent::Reload() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Reload called successfully"));
+	if (AmmoInReserve > 0) 
+	{
+		//AmmoInClip should take as much as it can from reserve and put it in clip
+		AmmoInClip += AmmoInReserve;
+		if (AmmoInClip > MaxAmmoInClip) 
+		{
+			AmmoInClip = MaxAmmoInClip;
+		}
+		AmmoInReserve -= AmmoInClip;
+	}
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Out of ammo!"));
+	}
+}
+
 int UTP_WeaponComponent::GetAmmoInClip()
 {
 	return AmmoInClip;
@@ -115,6 +135,12 @@ bool UTP_WeaponComponent::AttachWeapon(AFT_ReloadingAndAmmoCharacter* TargetChar
 		{
 			// Fire
 			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Fire);
+		}
+
+		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
+		{
+			// Fire
+			EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Reload);
 		}
 	}
 
